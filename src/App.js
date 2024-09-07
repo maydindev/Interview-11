@@ -11,28 +11,46 @@ const BuggyButtons = () => {
   const [openCount, setOpenCount] = useState(0);
   const IDs = [1, 2, 3, 4, 5];
 
+  const handleIncreaseCount = () => {
+    setOpenCount((prev) => prev + 1);
+  };
+
+  const handleDecreaseCount = () => {
+    setOpenCount((prev) => prev - 1);
+  };
+
   return (
     <>
       <div
         style={{
           display: "flex",
-          flexDirection: "column"
+          flexDirection: "column",
         }}
       >
         <div
           style={{ display: "flex", justifyContent: "center", marginTop: 50 }}
         >
-          {IDs.map((item) => {
-            <div
-              key={item}
-              style={{
-                marginRight: 10
-              }}
-              id={item}
-            >
-              <BuggyButton openCount={openCount} setOpenCount={setOpenCount} />
-            </div>;
-          })}
+          {
+            //return yoktu, eklendi.
+            IDs.map((item) => {
+              return (
+                <div
+                  key={item}
+                  style={{
+                    marginRight: 10,
+                  }}
+                  id={item}
+                >
+                  <BuggyButton /*openCount={openCount} 
+              setOpenCount={setOpenCount}*/
+                    //state set fonksiyonu bu şekilde geçirmek uygun olmadığından set üst bileşende fonksiyon yapılıp prop olarak aşağıya geçirildi.
+                    onIncreaseCount={handleIncreaseCount}
+                    onDecreaseCount={handleDecreaseCount}
+                  />
+                </div>
+              );
+            })
+          }
         </div>
         <div style={{ alignSelf: "center", marginTop: 20 }}>
           {openCount + " açık tavşan "}
@@ -42,7 +60,11 @@ const BuggyButtons = () => {
   );
 };
 
-const BuggyButton = (openCount, setOpenCount) => {
+//Bileşen parametresinde süslü parantez yoktu, eklendi.
+const BuggyButton = ({
+  /*openCount, setOpenCount*/ onIncreaseCount,
+  onDecreaseCount,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   return isOpen ? (
     <img
@@ -51,15 +73,24 @@ const BuggyButton = (openCount, setOpenCount) => {
       height={300}
       width={200}
       onClick={() => {
-        setOpenCount((p) => p - 1);
+        //setOpenCount((p) => p - 1);
+        onDecreaseCount();
         setIsOpen(false);
       }}
     />
   ) : (
     <button
       onClick={() => {
-        setOpenCount((p) => p + 1);
+        //setOpenCount((p) => p + 1);
+        onIncreaseCount();
         setIsOpen(true);
+      }}
+      style={{
+        backgroundColor: "#D3D3D3",
+        borderRadius: "2px",
+        border: "1px solid black",
+        margin: "3px",
+        padding: "3px",
       }}
     >
       TAVŞAN AÇ
